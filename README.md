@@ -2,9 +2,9 @@
 A server that allows web clients to control their own mix for a DiGiCo sound desk. This has been tested with A SD9 console running 760 Firmware (last version before stealth core 2).
 
 ![Example Server](terminal.jpg)
-![Example Drum Mix](drums.jpg)
-![Example Drum Panning](pan.jpg)
-![Example Bass Mix](bass.jpg)
+![Example Drum Mix](drums.jpg | width=200)
+![Example Drum Panning](pan.jpg | width=200)
+![Example Bass Mix](bass.jpg | width=200)
 
 Requirements
 [Node](https://nodejs.org/en/download/) must be installed. On macOS you can install it with [Homebrew](https://brew.sh/) (brew install node)
