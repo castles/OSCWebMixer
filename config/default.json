@@ -1,0 +1,68 @@
+{
+	"desk": {
+		"ip": "10.79.2.27",
+		"receive_port": 8001,
+		"send_port": 9001,
+		"channel_count": 48
+	},
+	"server": {
+		"port" : 8081
+	},
+	"aux": [
+		{
+			"label": "DRUMS",
+			"send": 1,
+			"stereo": true,
+			"colour": "6, 106, 166"
+		},
+		{
+			"label": "BASS",
+			"send": 2,
+			"stereo": true,
+			"colour": "6, 166, 99"
+		},
+		{
+			"label": "GTR",
+			"send": 4,
+			"stereo": true,
+			"colour": "48, 213, 6"
+		},
+		{
+			"label": "KEYS",
+			"send": 5,
+			"stereo": true,
+			"colour": "166, 6, 6"
+		},
+		{
+			"label": "Lead 1",
+			"send": 6,
+			"stereo": false,
+			"colour": "113, 6, 166"
+		},
+		{
+			"label": "Lead 2",
+			"send": 7,
+			"stereo": false,
+			"colour": "194, 62, 132"
+		},
+		{
+			"label": "BV 1",
+			"send": 8,
+			"stereo": false,
+			"colour": "6, 46, 140"
+		},
+		{
+			"label": "BV 2",
+			"send": 9,
+			"stereo": false,
+			"colour": "166, 89, 6"
+		},
+		{
+			"label": "BV 3",
+			"send": 10,
+			"stereo": false,
+			"colour": "242, 187, 0"
+		}
+	],
+	"ignore_channels" : []
+}
