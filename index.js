@@ -486,7 +486,7 @@ function startWebSocketServer()
 		console.log("wss error", err);
 	});
 	
-	console.log("\n\nServer Ready. Visit http://" + ipAddresses[0] + ":8081 in your web browser to access DiGiCo Mixer.");
+	console.log("\n\nServer Ready. Visit http://" + ipAddresses[0] + ":8081 in your web browser to access OSC Web Mixer.");
 }
 
 /**
