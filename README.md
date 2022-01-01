@@ -18,6 +18,10 @@ Requirements
   Ensure the server is running and the devices are connected on the same network.
 </details>
 <details>
+  <summary>Can I test it without a sound desk?</summary>
+  Yes, type "node . skip" when running the server.
+</details>
+<details>
   <summary>Why haven't you use Web Workers?</summary>
   Web workers require HTTPS to be enabled and that would be too much mucking around to get it working on clients. Feel free to reach out if you can come up with a nice way for this to work.
 </details>
