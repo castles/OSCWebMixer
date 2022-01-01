@@ -39,5 +39,5 @@ A server that allows web clients to control their own mix for a DiGiCo sound des
 </details>
 
 ## Donate
-If you find this project useful why not donate something to show your support?
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](marc@launchinteractive.com.au)
+If you find this project useful why not make a donation to show your support?
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](marc@launchinteractive.com.au)
