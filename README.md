@@ -27,11 +27,11 @@ A server that allows web clients to control their own mix for a DiGiCo sound des
 </details>
 <details>
   <summary>Can I test it without a sound desk?</summary>
-  Yes, type "node . skip" when running the server.
+  Yes, add skip parameter when running the server. eg. "node . skip"
 </details>
 <details>
   <summary>Can I view OSC messages from the desk?</summary>
-  Yes, type "node . debug" when running the server.
+  Yes, add debug parameter when running the server. eg. "node . debug"
 </details>
 <details>
   <summary>Why haven't you use Web Workers?</summary>
