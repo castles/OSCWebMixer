@@ -8,8 +8,9 @@ A server that allows web clients to control their own mix for a DiGiCo sound des
 <img src="https://github.com/castles/OSCWebMixer/blob/main/bass.jpg?raw=true" width="200">
 </div>
 
-Requirements
-[Node](https://nodejs.org/en/download/) must be installed. On macOS you can install it with [Homebrew](https://brew.sh/) (brew install node)
+### Requirements
+* [Node](https://nodejs.org/en/download/) must be installed. On macOS you can install it with [Homebrew](https://brew.sh/) (brew install node)
+* Server, Desk and other devices must all be on the same network
 
 ## Basic Setup Instructions
 1. Download repository and navigate to the directory in a shell.
