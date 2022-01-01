@@ -1,5 +1,5 @@
 # OSCWebMixer
-A server that allows web clients to control their own mix for a DiGiCo sound desk. This has been tested with A SD9 console running 760 Firmware (last version before stealth core 2).
+A server that allows web clients to control their own mix for a DiGiCo sound desk. This has been tested with A SD9 console running 760 Firmware (last version before Stealth Core 2).
 
 ![Example Server](terminal.jpg)
 <div align="center">
