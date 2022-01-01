@@ -1,8 +1,11 @@
 "use strict";
 
-const DESK_IP = "10.79.2.27",
-RECEIVE_PORT = 8001,
-SEND_PORT = 9001;
+const config = require('config'),
+osc = require("osc"),
+express = require("express"),
+WebSocket = require("ws"),
+http = require('http'),
+cliProgress = require('cli-progress');
 
 //The AUX channels for the session file you will be connecting to
 /**
@@ -16,200 +19,126 @@ SEND_PORT = 9001;
  }
  * @type Array[Object]
  */
-let auxs = [
-	{
-		label: "DRUMS",
-		send: 1,
-		stereo: true,
-		colour: "6, 106, 166"
-	},
-	{
-		label: "BASS",
-		send: 2,
-		stereo: true,
-		colour: "6, 166, 99"
-	},
-	{
-		label: "GTR",
-		send: 4,
-		stereo: true,
-		colour: "48, 213, 6"
-	},
-	{
-		label: "KEYS",
-		send: 5,
-		stereo: true,
-		colour: "166, 6, 6"
-	},
-	{
-		label: "Lead 1",
-		send: 6,
-		stereo: false,
-		colour: "113, 6, 166"
-	},
-	{
-		label: "Lead 2",
-		send: 7,
-		stereo: false,
-		colour: "194, 62, 132"
-	},
-	{
-		label: "BV 1",
-		send: 8,
-		stereo: false,
-		colour: "6, 46, 140"
-	},
-	{
-		label: "BV 2",
-		send: 9,
-		stereo: false,
-		colour: "166, 89, 6"
-	},
-	{
-		label: "BV 3",
-		send: 10,
-		stereo: false,
-		colour: "242, 187, 0"
-	}
-];
+let auxs = config.get('aux');
 
 /**
  * A list of channel numbers to ignore. When a channel number is listed here it will not be available in the app.
  * @type Array[Int]
  */
-const ignoreChannels = [];
+const ignoreChannels = config.get('ignore_channels');
 
+//the channels that are available to mix. By default this will be populated with channels 1-config.channel_count
+let channels = [];
 
-//// ------ Don't Edit Below This Line (Unless you know what your doing) ---------  ////
-
-
-const osc = require("osc"),
-    express = require("express"),
-    WebSocket = require("ws"),
-	http = require('http'),
-	cliProgress = require('cli-progress');
-
-//The channels that we currently support
-let channels = [
-	{
-		label: "CLICK",
-		number: 21
-	},
-	{
-		label: "MD",
-		number: 22
-	},
-	{
-		label: "MD2",
-		number: 31
-	},
-	{
-		label: "Kick",
-		number: 1
-	},
-	{
-		label: "Snare Top",
-		number: 3
-	},
-	{
-		label: "Snare Bottom",
-		number: 4
-	},
-	{
-		label: "Hats",
-		number: 5
-	},
-	{
-		label: "Tom 1",
-		number: 6
-	},
-	{
-		label: "Floor Tom",
-		number: 8
-	},
-	{
-		label: "OH L",
-		number: 9
-	},
-	{
-		label: "OH R",
-		number: 10 //???
-	},
-	{
-		label: "SPDSX",
-		number: 11
-	},
-	{
-		label: "BASS",
-		number: 13
-	},
-	{
-		label: "GTR",
-		number: 15
-	},
-	{
-		label: "ACOUSTIC2",
-		number: 17
-	},
-	{
-		label: "KEYS 1",
-		number: 47
-	},
-	{
-		label: "TRAX",
-		number: 20
-	},
-	{
-		label: "TRAX GTR",
-		number: 2
-	},
-	{
-		label: "LEAD 1",
-		number: 41
-	},
-	{
-		label: "LEAD 2",
-		number: 42
-	},
-	{
-		label: "BV1",
-		number: 43
-	},
-	{
-		label: "BV2",
-		number: 44
-	},
-	{
-		label: "BV3",
-		number: 45
-	},
-	{
-		label: "BV4",
-		number: 46
-	},
-	{
-		label: "Choir L",
-		number: 7
-	},
-	{
-		label: "Choir R",
-		number: 16
-	},
-	{
-		label: "MC1",
-		number: 29
-	},
-	{
-		label: "MC2",
-		number: 30
-	},
-	{
-		label: "Media",
-		number: 32 
-	},
-];
-
-//channels = [];
+if(process.argv[2] == "skip")
+{
+	channels = [
+		{
+			label: "CLICK",
+			number: 21
+		},
+		{
+			label: "MD",
+			number: 22
+		},
+		{
+			label: "Kick",
+			number: 1
+		},
+		{
+			label: "Snare Top",
+			number: 3
+		},
+		{
+			label: "Snare Bottom",
+			number: 4
+		},
+		{
+			label: "Hats",
+			number: 5
+		},
+		{
+			label: "Tom 1",
+			number: 6
+		},
+		{
+			label: "Floor Tom",
+			number: 8
+		},
+		{
+			label: "OH L",
+			number: 9
+		},
+		{
+			label: "OH R",
+			number: 10
+		},
+		{
+			label: "SPDSX",
+			number: 11
+		},
+		{
+			label: "BASS",
+			number: 13
+		},
+		{
+			label: "GTR",
+			number: 15
+		},
+		{
+			label: "ACOUSTIC",
+			number: 17
+		},
+		{
+			label: "KEYS",
+			number: 47
+		},
+		{
+			label: "TRAX",
+			number: 20
+		},
+		{
+			label: "TRAX GTR",
+			number: 2
+		},
+		{
+			label: "LEAD 1",
+			number: 41
+		},
+		{
+			label: "LEAD 2",
+			number: 42
+		},
+		{
+			label: "BV1",
+			number: 43
+		},
+		{
+			label: "BV2",
+			number: 44
+		},
+		{
+			label: "BV3",
+			number: 45
+		},
+		{
+			label: "BV4",
+			number: 46
+		},
+		{
+			label: "MC1",
+			number: 29
+		},
+		{
+			label: "MC2",
+			number: 30
+		},
+		{
+			label: "Media",
+			number: 32 
+		}
+	];
+}
 
 
 
@@ -244,9 +173,9 @@ let ipAddresses = getIPAddresses();
 // Bind to a UDP socket to listen for incoming OSC events.
 var udpPort = new osc.UDPPort({
 	localAddress: ipAddresses[0],
-	localPort: RECEIVE_PORT, //The port to listen on
-	remotePort: SEND_PORT, //The remote port to send messages to
-	remoteAddress: DESK_IP //The remote address to send messages to
+	localPort: config.get('desk.receive_port'), //The port to listen on
+	remotePort: config.get('desk.send_port'), //The remote port to send messages to
+	remoteAddress: config.get('desk.ip') //The remote address to send messages to
 });
 
 udpPort.on("error", function (err)
@@ -292,7 +221,7 @@ udpPort.on("ready", function ()
 		//request aux send names from desk
 		addressesToRequest.push("/sd/Aux_Outputs/" + aux.send + "/Buss_Trim/name");
 		
-		for(let i=1; i<=48; i++)
+		for(let i=1; i<=config.get('desk.channel_count'); i++)
 		{
 			//don't request addresses for channels that are being ignored
 			if(ignoreChannels.indexOf(i) !== -1)
@@ -312,7 +241,7 @@ udpPort.on("ready", function ()
 	});
 	
 	//request channel names from desk
-	for(let i=1; i<=48; i++)
+	for(let i=1; i<=config.get('desk.channel_count'); i++)
 	{
 		//don't request names for channels that are being ignored
 		if(ignoreChannels.indexOf(i) !== -1)
@@ -322,10 +251,6 @@ udpPort.on("ready", function ()
 		
 		addressesToRequest.push("/sd/Input_Channels/" + i + "/Channel_Input/name");
 	}
-	/*channels.forEach(function(channel)
-	{		
-		addressesToRequest.push("/sd/Input_Channels/" + channel.number + "/Channel_Input/name");
-	});*/
 
 	totalAddressesToRequest = addressesToRequest.length;
 	loadingProgress.start(totalAddressesToRequest, 0);
@@ -341,7 +266,9 @@ udpPort.on("ready", function ()
 	getNextAddress();
 });
 
+//Timeout to retry OSC message request
 let requestTimeout = null;
+//The current OSC address being requested from desk
 let currentRequestAddress = null;
 
 /**
@@ -368,7 +295,6 @@ function getNextAddress()
 	}
 	else
 	{
-		console.log(channels);
 		loadingProgress.stop();
 		startWebSocketServer();
 	}
@@ -379,7 +305,10 @@ function getNextAddress()
  */
 udpPort.on("message", function (oscMsg, timeTag, info)
 {
-	//console.log("udp An OSC message just arrived!", oscMsg);
+	if(process.argv[2] == "debug")
+	{
+		console.log("OSC message arrived: ", oscMsg);
+	}
 
 	//save the changes
 	saveConfig(oscMsg);
@@ -414,7 +343,7 @@ function startWebSocketServer()
 	var appResources = __dirname + "/web",
     	app = express();
 	
-	var server = http.createServer(app).listen(8081);
+	var server = http.createServer(app).listen(config.get('server.port'));
 	
 	app.use("/", express.static(appResources));
 	
@@ -469,7 +398,6 @@ function startWebSocketServer()
 				return;
 			}
 			
-			
 			//save the update
 			saveConfig(msg);
 	
@@ -486,7 +414,7 @@ function startWebSocketServer()
 		console.log("wss error", err);
 	});
 	
-	console.log("\n\nServer Ready. Visit http://" + ipAddresses[0] + ":8081 in your web browser to access OSC Web Mixer.");
+	console.log("\n\nServer Ready. Visit http://" + ipAddresses[0] + ":" + config.get('server.port') + " in your web browser to access OSC Web Mixer.");
 }
 
 /**
