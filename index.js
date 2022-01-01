@@ -7,14 +7,17 @@ WebSocket = require("ws"),
 http = require('http'),
 cliProgress = require('cli-progress');
 
+const SKIP = process.argv.indexOf("skip") !== -1;
+const DEBUG = process.argv.indexOf("debug") !== -1;
+
 //The AUX channels for the session file you will be connecting to
 /**
  * The AUX channels that will be available in the APP.
  * Each AUX object should have the following values:
  {
-	label: "AUX Label", //(label isn't required as it will be captured from the desk)
-	send: 1, //AUX number
-	stereo: true, //whether or not the AUX is a stereo output
+	label: "AUX Label", // label isn't required as it will be captured from the desk
+	send: 1, // AUX number
+	stereo: true, // whether or not the AUX is a stereo output
 	colour: "6, 106, 166" //the colour tint in for format R, G, B
  }
  * @type Array[Object]
@@ -30,7 +33,7 @@ const ignoreChannels = config.get('ignore_channels');
 //the channels that are available to mix. By default this will be populated with channels 1-config.channel_count
 let channels = [];
 
-if(process.argv[2] == "skip")
+if(SKIP)
 {
 	channels = [
 		{
@@ -140,8 +143,9 @@ if(process.argv[2] == "skip")
 	];
 }
 
-
-
+/**
+ * All the OSC address:values that have been saved since the server started
+ */
 let values = {};
 
 /**
@@ -180,12 +184,12 @@ var udpPort = new osc.UDPPort({
 
 udpPort.on("error", function (err)
 {
-	console.log("udp error", err);
+	console.log("UDP error", err);
 });
 
 /*udpPort.on("raw", function (data, info)
 {
-	console.log("udp raw", data, info);
+	console.log("UDP raw", data, info);
 });*/
 
 /**
@@ -255,7 +259,7 @@ udpPort.on("ready", function ()
 	totalAddressesToRequest = addressesToRequest.length;
 	loadingProgress.start(totalAddressesToRequest, 0);
 	
-	if(process.argv[2] == "skip")
+	if(SKIP)
 	{
 		loadingProgress.update(addressesToRequest.length);
 		loadingProgress.stop();
@@ -305,7 +309,7 @@ function getNextAddress()
  */
 udpPort.on("message", function (oscMsg, timeTag, info)
 {
-	if(process.argv[2] == "debug")
+	if(DEBUG)
 	{
 		console.log("OSC message arrived: ", oscMsg);
 	}
@@ -333,7 +337,6 @@ udpPort.on("message", function (oscMsg, timeTag, info)
 
 udpPort.open();
 
-
 //an array of socket connections that have connected
 let connections = [];
 
@@ -355,7 +358,10 @@ function startWebSocketServer()
 	{
 		connections.push(socket);
 	
-		console.log("New Connection");
+		if(DEBUG)
+		{
+			console.log("New Connection");
+		}
 		
 		//send new connection the current config
 		let info = JSON.stringify({
@@ -371,7 +377,10 @@ function startWebSocketServer()
 		{
 			let msg = JSON.parse(data);
 			
-			//console.log(msg);
+			if(DEBUG)
+			{
+				console.log("Message from client: ", msg);
+			}
 			
 			/*
 			Respond to connection when a request was made for the current values or an AUX.
@@ -471,8 +480,6 @@ function saveConfig(update)
 	match = /\/sd\/Input_Channels\/([0-9]+)\/Channel_Input\/name/.exec(update.address);
 	if(match)
 	{	
-		//console.log(match, update);
-		
 		//don't save channels we are ignoring
 		if(ignoreChannels.indexOf(match[1]) !== -1)
 		{
@@ -498,8 +505,13 @@ function saveConfig(update)
 		return;
 	}
 	
-	/**
-	 * Save send level and pan level in key value array
-	 */
-	values[update.address] = update.args[0];
+	//save volume and pan values
+	match = /\/sd\/Input_Channels\/[0-9]+\/Aux_Send\/[0-9]+\/send_(level|pan)/.exec(update.address);
+	if(match)
+	{
+		/**
+ 		* Save address and value for future use
+ 		*/
+		values[update.address] = update.args[0];
+	}	
 }
