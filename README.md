@@ -23,7 +23,7 @@ A server that allows web clients to control their own mix for a DiGiCo sound des
 ## FAQs
 <details>
   <summary>My External Devices won't connect</summary>
-  Ensure the server is running and the devices are connected on the same network.
+  Ensure the server is running and the devices are connected on the same network. Also check the External Control is configured correctly in the desk.
 </details>
 <details>
   <summary>Can I test it without a sound desk?</summary>
