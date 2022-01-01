@@ -15,7 +15,7 @@
         "OSC",
         "sound",
         "audio",
-        "DiGiCo",
+        "DiGiCo"
     ],
     "dependencies": {
         "cli-progress": "^3.9.1",
