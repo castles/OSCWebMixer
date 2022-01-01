@@ -15,7 +15,7 @@ Requirements
 1. Download repository and navigate to the directory in a shell.
 2. Run "npm install" to download all the required node modules.
 3. Ensure OSC is enabled and configured under External Control on the sound desk.
-4. Edit index.js and configure DESK_IP, RECEIVE_PORT, SEND_PORT, auxs and ignoreChannels.
+4. Configure the server by editing config/default.js
 5. Run "node ." in the shell to start the server. If a connection is made to the sound desk the script should load all the values and print the URL for other devices to connect to.
 6. Open the IP address on another device and start mixing. 
 
@@ -27,6 +27,10 @@ Requirements
 <details>
   <summary>Can I test it without a sound desk?</summary>
   Yes, type "node . skip" when running the server.
+</details>
+<details>
+  <summary>Can I view OSC messages from the desk?</summary>
+  Yes, type "node . debug" when running the server.
 </details>
 <details>
   <summary>Why haven't you use Web Workers?</summary>
