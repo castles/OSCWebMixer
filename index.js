@@ -22,7 +22,7 @@ const DEBUG = process.argv.indexOf("debug") !== -1;
  }
  * @type Array[Object]
  */
-let auxs = config.get('aux');
+let auxs = JSON.parse(JSON.stringify(config.get('aux')));
 
 /**
  * A list of channel numbers to ignore. When a channel number is listed here it will not be available in the app.
