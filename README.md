@@ -2,7 +2,7 @@
 A server that allows web clients to control their own mix for a DiGiCo sound desk. This has been tested with A SD9 console running 760 Firmware (last version before stealth core 2).
 
 ![Example Server](terminal.jpg)
-<img src="https://github.com/castles/OSCWebMixer/blob/main/drums.jpgo" width="200">
+<img src="https://github.com/castles/OSCWebMixer/blob/main/drums.jpg?raw=true" width="200">
 ![Example Drum Mix](https://github.com/castles/OSCWebMixer/blob/main/drums.jpg?raw=true | width=200)
 ![Example Drum Panning](pan.jpg | width=200)
 ![Example Bass Mix](bass.jpg | width=200)
