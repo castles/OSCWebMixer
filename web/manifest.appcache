@@ -1,0 +1,11 @@
+CACHE MANIFEST
+# VERSION 48
+
+mixer.css
+mixer.js
+index.html
+images/star.svg
+images/star-fill.svg
+
+NETWORK:
+*
