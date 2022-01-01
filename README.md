@@ -37,3 +37,7 @@ A server that allows web clients to control their own mix for a DiGiCo sound des
   <summary>Why haven't you use Web Workers?</summary>
   Web workers require HTTPS to be enabled and that would be too much mucking around to get it working on clients. Feel free to reach out if you can come up with a nice way for this to work.
 </details>
+
+## Donate
+If you find this project useful why not donate something to show your support?
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](marc@launchinteractive.com.au)
