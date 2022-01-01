@@ -3,9 +3,8 @@ A server that allows web clients to control their own mix for a DiGiCo sound des
 
 ![Example Server](terminal.jpg)
 <img src="https://github.com/castles/OSCWebMixer/blob/main/drums.jpg?raw=true" width="200">
-![Example Drum Mix](https://github.com/castles/OSCWebMixer/blob/main/drums.jpg?raw=true | width=200)
-![Example Drum Panning](pan.jpg | width=200)
-![Example Bass Mix](bass.jpg | width=200)
+<img src="https://github.com/castles/OSCWebMixer/blob/main/pan.jpg?raw=true" width="200">
+<img src="https://github.com/castles/OSCWebMixer/blob/main/bass.jpg?raw=true" width="200">
 
 Requirements
 [Node](https://nodejs.org/en/download/) must be installed. On macOS you can install it with [Homebrew](https://brew.sh/) (brew install node)
