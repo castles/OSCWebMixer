@@ -1,6 +1,8 @@
 # OSCWebMixer
 A server that allows web clients to control their own mix for a DiGiCo sound desk. This has been tested with A SD9 console running 760 Firmware (last version before Stealth Core 2).
 
+Users can save the site as a homescreen app which makes it easy for them to reconnect when needed. Users can also flag channels as favourites so they filter the display to see channels they are interested in.
+
 ![Example Server](terminal.jpg)
 <div align="center">
 <img src="https://github.com/castles/OSCWebMixer/blob/main/drums.jpg?raw=true" width="200">
