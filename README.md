@@ -28,6 +28,10 @@ Users can save the site as a homescreen app which makes it easy for them to reco
   Ensure the server is running and the devices are connected on the same network. Also check the External Control is configured correctly in the desk.
 </details>
 <details>
+  <summary>What devices does this work on?</summary>
+  Anything with a recent web browser can connect, that means it should work on iOS, Android, Windows, macOS and Linux.
+</details>
+<details>
   <summary>How many devices can I connect at once?</summary>
   No limit has been set and we haved tested 20+ without any issues.
 </details>
