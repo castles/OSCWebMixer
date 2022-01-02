@@ -1,5 +1,5 @@
 # OSCWebMixer
-A server that allows web clients to control their own mix for a DiGiCo sound desk. This has been tested with A SD9 console running 760 Firmware (last version before Stealth Core 2).
+A server that allows multiple web clients to control their own mix for a DiGiCo sound desk. This has been tested with A SD9 console running 760 Firmware (last version before Stealth Core 2). 
 
 Users can save the site as a homescreen app which makes it easy for them to reconnect when needed. Users can also flag channels as favourites so they filter the display to see channels they are interested in.
 
@@ -26,6 +26,10 @@ Users can save the site as a homescreen app which makes it easy for them to reco
 <details>
   <summary>My External Devices won't connect</summary>
   Ensure the server is running and the devices are connected on the same network. Also check the External Control is configured correctly in the desk.
+</details>
+<details>
+  <summary>How many devices can I connect at once?</summary>
+  No limit has been set and we haved tested 20+ without any issues.
 </details>
 <details>
   <summary>Can I test it without a sound desk?</summary>
