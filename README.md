@@ -11,6 +11,8 @@ Users can save the website as a homescreen app which makes it easy for them to r
 </div>
 
 ### Requirements
+* An DiGiCo Mixing desk with the OSC extension installed and enabled.
+* A computer to run the server. Windows and macOS work fine. There is no reason why linux wouldn't work.
 * [Node](https://nodejs.org/en/download/) must be installed. On macOS you can install it with [Homebrew](https://brew.sh/) (brew install node)
 * Server, Desk and other devices must all be on the same network
 
