@@ -271,10 +271,14 @@ label.pan:after
 	width: 44px;
 	background: rgba(255,255,255,1);
 	position: absolute;
-	left: 50vw;
+	left: calc((100vw - 44px) / 2);
 	bottom: 0;
 	width: calc(var(--value) - 50%);
 	z-index: -1;
+}
+.favourites label.pan:after
+{
+	left: 50vw;
 }
 
 label.pan:before
@@ -284,12 +288,15 @@ label.pan:before
 	width: 44px;
 	background: rgba(255,255,255,1);
 	position: absolute;
-	right: 50vw;
+	right: calc((100vw - 44px) / 2);
 	bottom: 0;
 	width: calc(50% - var(--value));
 	z-index: -1;
 }
-
+.favourites label.pan:before
+{
+	right: 50vw;
+}
 
 
 #loader,
