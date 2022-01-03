@@ -3,6 +3,8 @@ A server that allows multiple web clients to control their own mix for a DiGiCo 
 
 Users can save the website as a homescreen app which makes it easy for them to reconnect when needed. Users can also flag channels as favourites so they filter the display to see channels they are interested in.
 
+There are no technical reasons why this wouldn't work with other sound desks that support OSC. It would just be a matter of adjusting the OSC address commands. Feel free to reach out if you are interested in this.
+
 ![Example Server](terminal.jpg)
 <div align="center">
 <img src="https://github.com/castles/OSCWebMixer/blob/main/drums.jpg?raw=true" width="200">
