@@ -487,14 +487,14 @@ function saveConfig(update)
 		}
 		
 		//look for a channel to update
-		channels.forEach(function(channel)
+		for(let channel of channels)
 		{
 			if(channel.number == match[1])
 			{
 				channel.label = update.args[0];
 				return;
 			}
-		});
+		}
 		
 		//no channel found so add one
 		channels.unshift({
