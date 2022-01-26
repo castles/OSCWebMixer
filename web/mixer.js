@@ -3,7 +3,8 @@
 const channelsDiv = document.getElementById('channels'),
 auxSelect = document.getElementById('aux'),
 panCheckbox = document.getElementById("panning"),
-favourites = document.getElementById("favourites");
+favourites = document.getElementById("favourites"),
+auxiliaries = document.getElementById("auxiliaries");
 
 let ws = null,
 timeout = null;
@@ -20,7 +21,7 @@ function sliderChange(e)
 	{
 		return;
 	}
-	
+
 	let parameter = "send_level";
 	if(this.classList.contains("panInput"))
 	{
@@ -53,9 +54,9 @@ function requestValues()
 function onMessage(e)
 {
 	let json = JSON.parse(e.data);
-	
+
 	//console.log(json);
-	
+
 	//Setup AUX and channels
 	if(json.address == "config")
 	{
@@ -66,21 +67,21 @@ function onMessage(e)
 
 	//Set values for all channels for the current AUX
 	if(json.address == "/sd/Aux_Outputs/" + auxSelect.value)
-	{		
+	{
 		for(let slider of document.getElementsByClassName("volumeInput"))
 		{
 			let value = json.args["/sd/Input_Channels/" + slider.dataset.channel + "/Aux_Send/" + auxSelect.value + "/send_level"] ?? 0;
 			slider.value = value;
 			slider.parentNode.style.setProperty('--value', (value * 100) + "%");
 		}
-		
+
 		for(let slider of document.getElementsByClassName("panInput"))
 		{
 			let value = json.args["/sd/Input_Channels/" + slider.dataset.channel + "/Aux_Send/" + auxSelect.value + "/send_pan"] ?? 0.5;
 			slider.value = value;
 			slider.parentNode.style.setProperty('--value', (value * 100) + "%");
 		}
-		
+
 		let checkedFavourites = localStorage.getItem("aux" + auxSelect.value + "fav");
 		if(checkedFavourites)
 		{
@@ -90,22 +91,22 @@ function onMessage(e)
 		{
 			checkedFavourites = [];
 		}
-		
+
 		//restore whether or not favourites checkbox was ticked previously
 		favourites.checked = localStorage.getItem("aux" + auxSelect.value + "favChecked") == "true";
-		
+
 		//restore previously favourited channels
 		for(let fav of document.querySelectorAll('input[name="fav[]"]'))
 		{
 			fav.checked = checkedFavourites.indexOf(fav.value) != -1;
 		}
-		
+
 		//make sure channel visibility is correct
-		favourites.dispatchEvent(new Event("change"));	
-		
+		favourites.dispatchEvent(new Event("change"));
+
 		return;
 	}
-	
+
 	//when an aux name changes
 	let match = /\/sd\/Aux_Outputs\/([0-9]+)\/Buss_Trim\/name/.exec(json.address);
 	if(match)
@@ -120,27 +121,27 @@ function onMessage(e)
 		}
 		return;
 	}
-	
+
 	//when a channel name changes
 	match = /\/sd\/Input_Channels\/([0-9]+)\/Channel_Input\/name/.exec(json.address);
 	if(match)
 	{
 		let channel = match[1];
-		
+
 		for(let slider of document.querySelectorAll('input[data-channel="' + channel + '"]'))
 		{
 			slider.previousElementSibling.innerHTML = json.args[0];
 		}
 		return;
 	}
-	
+
 	//Update the volume for a single channel
 	let regex = new RegExp("/sd/Input_Channels/([0-9]+)/Aux_Send/" + auxSelect.value + "/send_level");
 	match = regex.exec(json.address);
 	if(match)
 	{
 		let channel = match[1];
-		
+
 		for(let slider of document.querySelectorAll('input[data-channel="'+channel+'"].volumeInput'))
 		{
 			slider.parentNode.style.setProperty('--value', (json.args[0] * 100) + "%");
@@ -148,14 +149,14 @@ function onMessage(e)
 		}
 		return;
 	}
-	
+
 	//Update the pan for a single channel
 	regex = new RegExp("/sd/Input_Channels/([0-9]+)/Aux_Send/" + auxSelect.value + "/send_pan");
 	match = regex.exec(json.address);
 	if(match)
 	{
 		let channel = match[1];
-		
+
 		for(let slider of document.querySelectorAll('input[data-channel="'+channel+'"].panInput'))
 		{
 			slider.parentNode.style.setProperty('--value', (json.args[0] * 100) + "%");
@@ -171,20 +172,58 @@ function onMessage(e)
  */
 function buildAux(options)
 {
-	let html = "";
+	let selectHTML = "";
+
+	auxiliaries.innerHTML = "";
+
 	for(let option of options)
 	{
-		html += '<option value="' + option.send + '" data-colour="' + option.colour + '" data-stereo="' + option.stereo + '">' + option.label + '</option>';
+		selectHTML += '<option value="' + option.send + '" data-colour="' + option.colour + '" data-stereo="' + option.stereo + '">' + option.label + '</option>';
+
+		let button = document.createElement("button");
+		button.value = option.send;
+		button.innerHTML = option.label;
+		button.style.setProperty('--tint', option.colour);
+		auxiliaries.appendChild(button);
 	}
-	auxSelect.innerHTML = html;
-	
+	auxSelect.innerHTML = selectHTML;
+
 	if(localStorage.getItem("aux"))
 	{
 		auxSelect.value = localStorage.getItem("aux");
 	}
-	
+	else
+	{
+		document.body.classList.add("auxPicker");
+	}
+
 	auxSelect.dispatchEvent(new Event("change"));
 }
+
+/**
+ * open the auxiliaries picker when tapped
+ * @param MouseEvent e - the mouse event
+ */
+auxSelect.addEventListener("mousedown", function(e)
+{
+	e.preventDefault();
+	e.stopImmediatePropagation();
+	document.body.classList.add("auxPicker");
+});
+
+/**
+ * Select the Aux when a button is tapped
+ * @param MouseEvent e - the mouse event
+ */
+auxiliaries.addEventListener("click", function(e)
+{
+	if(e.target.nodeName == "BUTTON")
+	{
+		auxSelect.value = e.target.value;
+		auxSelect.dispatchEvent(new Event("change"));
+		document.body.classList.remove("auxPicker");
+	}
+});
 
 //Detect double tap events for touch devices
 let tapedTwice = false;
@@ -223,7 +262,7 @@ function resetSlider(e)
  * @param array channels - the channels to build
  */
 function buildChannels(channels)
-{	
+{
 	let html = "";
 	for(let channel of channels)
 	{
@@ -233,9 +272,9 @@ function buildChannels(channels)
 		html += '<label class="favourite starCheckbox"><input type="checkbox" name="fav[]" value="' + channel.number + '"/></label>';
 		html += '</div>';
 	}
-	
+
 	channelsDiv.innerHTML = html;
-	
+
 	for(let slider of document.querySelectorAll(".volumeInput, .panInput"))
 	{
 		slider.addEventListener("input", sliderChange);
@@ -286,9 +325,9 @@ document.addEventListener("DOMContentLoaded", function()
 {
 	//ensure the browser doesn't remember checked status
 	panCheckbox.checked = false;
-	
+
 	startWebsocket();
-	
+
 	/**
 	 * Handle Aux Select Changes
 	 */
@@ -296,11 +335,13 @@ document.addEventListener("DOMContentLoaded", function()
 	{
 		//save aux value so it can be restored
 		localStorage.setItem("aux", this.value);
-		
+
 		//set the current page tint
 		let colour = this.getElementsByTagName("option")[this.selectedIndex].dataset.colour;
 		document.body.style.setProperty('--tint', colour);
-		
+
+		this.previousElementSibling.innerHTML = this.getElementsByTagName("option")[this.selectedIndex].text;
+
 		//toggle visibility of the pan checkbox
 		if(this.getElementsByTagName("option")[this.selectedIndex].dataset.stereo == "true")
 		{
@@ -310,15 +351,15 @@ document.addEventListener("DOMContentLoaded", function()
 		{
 			panCheckbox.parentNode.style.display = "none";
 		}
-		
+
 		//disable panning if it was prevously selected
 		panCheckbox.checked = false;
 		panCheckbox.dispatchEvent(new Event("change"));
-		
+
 		//request all the channel values for the selected aux
 		requestValues();
 	});
-	
+
 	/**
 	 * Handle Panning Checkbox changes
 	 */
@@ -333,7 +374,7 @@ document.addEventListener("DOMContentLoaded", function()
 			document.body.classList.remove("panning");
 		}
 	});
-	
+
 	/**
 	 * iOS Safari doesn't calculate 100vh well so we do it with javascript. When saved to homescreen 100vh is fine.
 	 */
@@ -346,13 +387,13 @@ document.addEventListener("DOMContentLoaded", function()
 		document.body.style.setProperty('--vh', window.innerHeight + "px");
 	}
 	window.onresize();
-	
-	
+
+
 	/**
 	 * When the Favourites checkbox has changed
 	 */
 	favourites.addEventListener("change", function(e)
-	{	
+	{
 		//Force Momentum scrolling to stop on iOS.
 		//This fixes an issue where channels might appear blank after tapping the favourites toggle.
 		channelsDiv.style.overflow = 'hidden';
@@ -360,9 +401,9 @@ document.addEventListener("DOMContentLoaded", function()
 		setTimeout(function(){
 		  channelsDiv.style.removeProperty("overflow");
 		}, 10);
-		
+
 		localStorage.setItem("aux" + auxSelect.value + "favChecked", favourites.checked);
-		
+
 		for(let fav of document.querySelectorAll('input[name="fav[]"]'))
 		{
 			if(fav.checked || !favourites.checked)
@@ -374,7 +415,7 @@ document.addEventListener("DOMContentLoaded", function()
 				fav.closest("div").style.display = "none";
 			}
 		}
-		
+
 		if(favourites.checked)
 		{
 			document.body.classList.add("favourites");
@@ -384,7 +425,7 @@ document.addEventListener("DOMContentLoaded", function()
 			document.body.classList.remove("favourites");
 		}
 	});
-	
+
 	/**
 	 * Handle channel favourite change events
 	 */
@@ -394,7 +435,7 @@ document.addEventListener("DOMContentLoaded", function()
 		{
 			return;
 		}
-		
+
 		let checkedfavs = [];
 		for(let checked of document.querySelectorAll('input[name="fav[]"]:checked'))
 		{
