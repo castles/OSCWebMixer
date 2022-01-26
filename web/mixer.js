@@ -119,6 +119,13 @@ function onMessage(e)
 				option.innerHTML = json.args[0];
 			}
 		}
+		for(let button of auxiliaries.getElementsByTagName("button"))
+		{
+			if(button.value == aux)
+			{
+				button.innerText = json.args[0];
+			}
+		}
 		return;
 	}
 
