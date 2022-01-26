@@ -62,7 +62,7 @@ body
 	background: #000;
 	color: #FFF;
 	font-family: sans-serif;
-	
+
 	/*
 	Disable body scrolling
 	*/
@@ -91,20 +91,10 @@ body
 #mix > div
 {
 	display: flex;
-	align-items: center;
+	align-items: stretch;
 	width: 44px;
 	height: 44px;
-}
-
-#mix > div:first-child
-{
-	margin-left: 10px;
-}
-
-#mix > div:first-child span
-{
-	padding-top: 2px;
-}
+}	
 
 label.starCheckbox
 {
@@ -134,7 +124,7 @@ label.starCheckbox input:after
 	top: 0;
 	left: 0;
 	position: absolute;
-	justify-content: flex-end;	
+	justify-content: flex-end;
 	background: url("images/star.svg") center no-repeat;
 	background-size: 30px;
 }
@@ -148,6 +138,8 @@ label.starCheckbox input:checked:after
 {
 	display: flex;
 	align-items: center;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 #channels
@@ -192,7 +184,7 @@ input[type='range']
 	display: block;
 
 	-webkit-appearance: none;
-	
+
 	/*disable tap on range bar*/
 	pointer-events: none;
 }
@@ -206,7 +198,7 @@ input[type=range]::-moz-range-thumb
 	border-radius: 0;
 	cursor: pointer;
 	box-shadow: 0 0 0 #000000, 0 0 0 #0d0d0d;
-	
+
 	/*allow tap events on thumb*/
 	pointer-events: auto;
 }
@@ -222,16 +214,16 @@ input[type='range']::-webkit-slider-thumb
 	cursor: pointer;
 
 	box-shadow: 0 0 0 #000000, 0 0 0 #0d0d0d;
-	
+
 	/*allow tap events on thumb */
 	pointer-events: auto;
-	
+
 	/*
-	This prevents a draw issue on the range sliders. 
+	This prevents a draw issue on the range sliders.
 	This seems to have fixed it for iOS15
 	*/
 	/*transform: translateZ(0);*/
-	-webkit-transform: translate3d(0, 0, 0);	
+	-webkit-transform: translate3d(0, 0, 0);
 }
 
 label.volume,
@@ -242,13 +234,13 @@ label.pan
 	position: relative;
 	margin-bottom: 10px;
 	user-select: none;
-	
+
 	/*
-	This prevents a draw issue on the range sliders. 
+	This prevents a draw issue on the range sliders.
 	This seems to have fixed it for iOS15
 	*/
 	/*transform: translateZ(0);*/
-	-webkit-transform: translate3d(0, 0, 0);	
+	-webkit-transform: translate3d(0, 0, 0);
 }
 
 label.volume:after
@@ -381,14 +373,18 @@ html, body
 
 select
 {
-	background: transparent;	
-	appearance: none;
+	-moz-appearance: none;
 	-webkit-appearance: none;
+	appearance: none;
 	color: #FFF;
-	font-weight: bold;
-	background: transparent;
-	padding: 0 28px 0 5px;
-	border: 1px solid rgba(255,255,255,.5);
+	padding: 0;
+	border: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
 }
 
 .selectLabel
@@ -396,6 +392,14 @@ select
 	position: relative;
 	display: flex;
 	margin: 5px auto;
+	border: 1px solid rgba(255,255,255,.8);
+	align-items: center;
+	border-radius: 5px;
+}
+
+.selectLabel span
+{
+	padding: 0 30px 0 8px;
 }
 
 .selectLabel:after
@@ -408,7 +412,7 @@ select
 	height: 10px;
 	position: absolute;
 	top: 9px;
-	right: 10px;
+	right: 11px;
 	transform: rotate(45deg);
 	pointer-events: none;
 }
@@ -464,4 +468,68 @@ label.pan
 .favourites.panning #channels:after
 {
 	left: 50vw;
+}
+
+#auxiliaries
+{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	height: -webkit-fill-available;
+	overflow: auto;
+	background: rgba(0,0,0,.5);
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
+	z-index: 10;
+	padding: 40px 20px;
+	display: none;
+	text-align: center;
+	flex-direction: column;
+	gap: 10px;
+}
+
+body.auxPicker #auxiliaries
+{
+	display: flex;
+}
+
+#auxiliaries button
+{
+	display: inline-block;
+	color: #FFF;
+	width: 100%;
+	cursor: pointer;
+	padding: 20px;
+	border-radius: 0;
+	border: 0;
+	max-width: 400px;
+	background: rgb(var(--tint, "6, 106, 166"));
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	box-shadow: 0 0 10px rgba(0,0,0,.5);
+	font-weight: bold;
+}
+
+#auxiliaries button:after
+{
+	content: "";
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	width: calc(100% - 6px);
+	height: calc(100% - 6px);
+	border: 1px solid rgba(255,255,255,.5);
+}
+
+#auxiliaries button:first-child
+{
+	margin-top: auto;
+}
+
+#auxiliaries button:last-child
+{
+	margin-bottom: auto;
 }
