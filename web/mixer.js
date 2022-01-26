@@ -204,18 +204,19 @@ function buildAux(options)
  * open the auxiliaries picker when tapped
  * @param MouseEvent e - the mouse event
  */
-auxSelect.addEventListener("mousedown", function(e)
+function auxMouseDown(e)
 {
 	e.preventDefault();
 	e.stopImmediatePropagation();
 	document.body.classList.add("auxPicker");
-});
+}
+auxSelect.addEventListener("mousedown", auxMouseDown);
 
 /**
  * Select the Aux when a button is tapped
  * @param MouseEvent e - the mouse event
  */
-auxiliaries.addEventListener("click", function(e)
+function auxPickerClick(e)
 {
 	if(e.target.nodeName == "BUTTON")
 	{
@@ -223,7 +224,8 @@ auxiliaries.addEventListener("click", function(e)
 		auxSelect.dispatchEvent(new Event("change"));
 		document.body.classList.remove("auxPicker");
 	}
-});
+}
+auxiliaries.addEventListener("click", auxPickerClick);
 
 //Detect double tap events for touch devices
 let tapedTwice = false;
