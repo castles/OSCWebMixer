@@ -7,9 +7,9 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-title" content="Web Mixer">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-		
+
 		<link rel="stylesheet" href="mixer.css">
-		
+
 		<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
 		<link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
 		<link rel="apple-touch-icon" sizes="57x57" href="/images/apple-touch-icon-57x57.png" />
@@ -25,13 +25,16 @@
 	<body class="disconnected">
 		<div id="mix">
 			<div><label><input id="panning" type="checkbox" /> <span>PAN</span></label></div>
-			<label class="selectLabel"><select id="aux"></select></label>
+			<label class="selectLabel"><span></span><select id="aux"></select></label>
 			<label class="starCheckbox"><input id="favourites" type="checkbox" /></label>
 		</div>
 		</div>
 		<div id="channels"></div>
 		<div id="overlay"></div>
 		<div id="loader"></div>
+
+		<div id="auxiliaries"></div>
+
 		<script src="mixer.js"></script>
 	</body>
 </html>
