@@ -269,7 +269,7 @@ function buildChannels(channels)
 		html += "<div>";
 		html += '<label class="volume"><span>' + channel.label + '</span><input type="range" data-channel="' + channel.number + '" class="volumeInput" step="0.01" min="0" max="1" value="0" /></label>';
 		html += '<label class="pan"><span>' + channel.label + '</span><input type="range" data-channel="' + channel.number + '" class="panInput" step="0.01" min="0" max="1" value="0.5" /></label>';
-		html += '<label class="favourite starCheckbox"><input type="checkbox" name="fav[]" value="' + channel.number + '"/></label>';
+		html += '<label class="favourite starCheckbox"><input type="checkbox" name="fav[]" value="' + channel.number + '" title="Mark as Favourite" /></label>';
 		html += '</div>';
 	}
 
