@@ -468,7 +468,7 @@ function saveConfig(update)
 		//console.log(match, update);
 		auxs.forEach(function(aux)
 		{
-			if(aux.send == match[1])
+			if(aux.send == parseInt(match[1]))
 			{
 				aux.label = update.args[0];
 			}
@@ -480,8 +480,9 @@ function saveConfig(update)
 	match = /\/sd\/Input_Channels\/([0-9]+)\/Channel_Input\/name/.exec(update.address);
 	if(match)
 	{	
+		let channelNumber = parseInt(match[1]);
 		//don't save channels we are ignoring
-		if(ignoreChannels.indexOf(match[1]) !== -1)
+		if(ignoreChannels.indexOf(channelNumber) !== -1)
 		{
 			return;
 		}
@@ -489,7 +490,7 @@ function saveConfig(update)
 		//look for a channel to update
 		for(let channel of channels)
 		{
-			if(channel.number == match[1])
+			if(channel.number == channelNumber)
 			{
 				channel.label = update.args[0];
 				return;
@@ -499,7 +500,7 @@ function saveConfig(update)
 		//no channel found so add one
 		channels.unshift({
 			label: update.args[0],
-			number: parseInt(match[1])
+			number: channelNumber
 		});
 		
 		return;
