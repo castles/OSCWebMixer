@@ -48,7 +48,7 @@ There are no technical reasons why this wouldn't work with other sound desks tha
   Yes, add debug parameter when running the server. eg. "node . debug"
 </details>
 <details>
-  <summary>Why haven't you use Web Workers?</summary>
+  <summary>Why haven't you used Web Workers?</summary>
   Web workers require HTTPS to be enabled and that would be too much mucking around to get it working on clients. Feel free to reach out if you can come up with a nice way for this to work.
 </details>
 
