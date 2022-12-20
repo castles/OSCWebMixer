@@ -20,7 +20,7 @@
     "dependencies": {
         "cli-progress": "^3.9.1",
         "config": "^3.3.6",
-        "express": "4.17.1",
+        "express": "4.17.3",
         "osc": "2.4.2",
         "ws": "7.5.3"
     }
