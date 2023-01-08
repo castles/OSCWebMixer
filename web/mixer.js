@@ -117,6 +117,9 @@ function onMessage(e)
 			if(option.value == aux)
 			{
 				option.innerHTML = json.args[0];
+				
+				//make sure the aux span is correct
+				auxSelect.previousElementSibling.innerHTML = auxSelect.getElementsByTagName("option")[auxSelect.selectedIndex].text;
 			}
 		}
 		for(let button of auxiliaries.getElementsByTagName("button"))
