@@ -153,16 +153,16 @@ let values = {};
  */
 function getIPAddresses()
 {
-	var os = require("os"),
+	let os = require("os"),
 	interfaces = os.networkInterfaces(),
 	ipAddresses = [];
 
-	for (var deviceName in interfaces)
+	for (let deviceName in interfaces)
 	{
-		var addresses = interfaces[deviceName];
-		for (var i = 0; i < addresses.length; i++)
+		let addresses = interfaces[deviceName];
+		for (let i = 0; i < addresses.length; i++)
 		{
-			var addressInfo = addresses[i];
+			let addressInfo = addresses[i];
 			if(addressInfo.family === "IPv4" && !addressInfo.internal)
 			{
 				ipAddresses.push(addressInfo.address);
@@ -175,7 +175,7 @@ function getIPAddresses()
 let ipAddresses = getIPAddresses();
 
 // Bind to a UDP socket to listen for incoming OSC events.
-var udpPort = new osc.UDPPort({
+let udpPort = new osc.UDPPort({
 	localAddress: ipAddresses[0],
 	localPort: config.get('desk.receive_port'), //The port to listen on
 	remotePort: config.get('desk.send_port'), //The remote port to send messages to
@@ -343,14 +343,14 @@ let connections = [];
 function startWebSocketServer()
 {
 	// Create an Express-based Web Socket server that clients can connect to
-	var appResources = __dirname + "/web",
+	let appResources = __dirname + "/web",
     	app = express();
 	
-	var server = http.createServer(app).listen(config.get('server.port'));
+	let server = http.createServer(app).listen(config.get('server.port'));
 	
 	app.use("/", express.static(appResources));
 	
-	var wss = new WebSocket.Server({
+	let wss = new WebSocket.Server({
 		server: server
 	});
 
@@ -481,6 +481,7 @@ function saveConfig(update)
 	if(match)
 	{	
 		let channelNumber = parseInt(match[1]);
+		
 		//don't save channels we are ignoring
 		if(ignoreChannels.indexOf(channelNumber) !== -1)
 		{
@@ -507,9 +508,17 @@ function saveConfig(update)
 	}
 	
 	//save volume and pan values
-	match = /\/sd\/Input_Channels\/[0-9]+\/Aux_Send\/[0-9]+\/send_(level|pan)/.exec(update.address);
+	match = /\/sd\/Input_Channels\/([0-9]+)\/Aux_Send\/[0-9]+\/send_(level|pan)/.exec(update.address);
 	if(match)
 	{
+		let channelNumber = parseInt(match[1]);
+		
+		//don't save channels we are ignoring
+		if(ignoreChannels.indexOf(channelNumber) !== -1)
+		{
+			return;
+		}
+		
 		/**
  		* Save address and value for future use
  		*/
