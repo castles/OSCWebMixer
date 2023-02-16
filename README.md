@@ -22,14 +22,28 @@ Users can save the website as a homescreen app which makes it easy for them to r
 * [Node](https://nodejs.org/en/download/) must be installed. On macOS you can install it with [Homebrew](https://brew.sh/) (brew install node)
 * Server, Desk and other devices must all be on the same network
 
-## Basic Setup Instructions
+### S-Series Known Bugs
+* Sends greater than 15 cannot be used. These will only be available if you have purchased the Channel Count Increase upgrade. The reason they can't be used is because the current version of the S-Series doesn't send the initial values for these channels, causing webmixer to never completely load. The best workaround for this for now is to only use the first 16 AUX channels with webmixer.
+
+## SD Basic Setup Instructions
 1. Download repository and navigate to the directory in a shell.
 2. Run "npm install" to download all the required node modules.
 3. Ensure OSC is enabled and configured under External Control on the sound desk.
-4. Rename config/default-SD.js or config/default-S.js to config/default.js depending on your desk version.
-5. For S-Series Only: Run "node . debug" in the shell to start the server. Move faders and take note of the numbers for channels and sends. You will need to update the numbers in the config file to match.
-6. Run "node ." in the shell to start the server. If a connection is made to the sound desk the script should load all the values and print the URL for other devices to connect to.
-7. Open the IP address on another device and start mixing.
+4. Rename config/default-SD.js to config/default.js
+5. Update the config to include the console IP and send + receive ports.
+6. Go to Layout > Channel List on the console and enter the AUX numbers and Input Channel numbers into your config file. Save the config.
+7. Run "node ." in the shell to start the server. If a connection is made to the sound desk the script should load all the values and print the URL for other devices to connect to.
+8. Open the IP address on another device and start mixing.
+
+## S-Series Basic Setup Instructions
+1. Download repository and navigate to the directory in a shell.
+2. Run "npm install" to download all the required node modules.
+3. Ensure OSC is enabled on the console. You will need to enter the IP of webmixer computer and enable the send and receive ports.
+4. Rename config/default-S.js to config/default.js
+5. Update the config to include the console IP and send + receive ports.
+6. Run "node . debug" in the shell to start the server. Move faders and take note of the numbers for channels and sends. You will need to update the numbers in the config file to match.
+7. Run "node ." in the shell to start the server. If a connection is made to the sound desk the script should load all the values and print the URL for other devices to connect to.
+8. Open the IP address on another device and start mixing.
 
 ## FAQs
 <details>
@@ -55,6 +69,10 @@ Users can save the website as a homescreen app which makes it easy for them to r
 <details>
   <summary>Why haven't you used Web Workers?</summary>
   Web workers require HTTPS to be enabled and that would be too much mucking around to get it working on clients. Feel free to reach out if you can come up with a nice way for this to work.
+</details>
+<details>
+  <summary>WebMixer doesn't finish loading</summary>
+  Sometimes the information for a channel is not returned by the desk. Your config may be incorrect. In this case try removing channels and/or AUXs to determine which is causing webmixer not to load.
 </details>
 
 ## Donate
