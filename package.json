@@ -18,10 +18,10 @@
         "DiGiCo"
     ],
     "dependencies": {
-        "cli-progress": "^3.9.1",
-        "config": "^3.3.6",
-        "express": "4.17.3",
-        "osc": "2.4.2",
-        "ws": "7.5.3"
+        "cli-progress": "^3.11.2",
+        "config": "^3.3.9",
+        "express": "4.18.2",
+        "osc": "2.4.3",
+        "ws": "8.12.0"
     }
 }

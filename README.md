@@ -1,9 +1,7 @@
 # OSCWebMixer
-A server that allows multiple web clients to control their own mix for a DiGiCo sound desk. This has been tested with a SD9 console running 760 Firmware as well as with Stealth Core 2.
+A server that allows multiple web clients to control their own mix for a DiGiCo sound desk. It currently works with SD and S-Series consoles.
 
 Users can save the website as a homescreen app which makes it easy for them to reconnect when needed. Users can also flag channels as favourites so they filter the display to see channels they are interested in.
-
-There are no technical reasons why this wouldn't work with other sound desks that support OSC. It would just be a matter of adjusting the OSC address commands. Feel free to reach out if you are interested in this.
 
 ![Example Server](terminal.jpg)
 <div align="center">
@@ -12,9 +10,15 @@ There are no technical reasons why this wouldn't work with other sound desks tha
 <img src="https://github.com/castles/OSCWebMixer/blob/main/bass.jpg?raw=true" width="200">
 </div>
 
-### Requirements
-* An DiGiCo Mixing desk with the OSC extension installed and enabled.
-* A computer to run the server. Windows and macOS work fine. There is no reason why linux wouldn't work.
+### SD Range Requirements
+* A SD Range DiGiCo Mixing desk with the OSC extension installed and enabled.
+* A computer to run the server. Windows, macOS or Linux.
+* [Node](https://nodejs.org/en/download/) must be installed. On macOS you can install it with [Homebrew](https://brew.sh/) (brew install node)
+* Server, Desk and other devices must all be on the same network
+
+### S-Series Requirements
+* A S-Series DiGiCo Mixing desk with the latest firmware installed.
+* A computer to run the server. Windows, macOS or Linux.
 * [Node](https://nodejs.org/en/download/) must be installed. On macOS you can install it with [Homebrew](https://brew.sh/) (brew install node)
 * Server, Desk and other devices must all be on the same network
 
@@ -22,9 +26,10 @@ There are no technical reasons why this wouldn't work with other sound desks tha
 1. Download repository and navigate to the directory in a shell.
 2. Run "npm install" to download all the required node modules.
 3. Ensure OSC is enabled and configured under External Control on the sound desk.
-4. Configure the server by editing config/default.js
-5. Run "node ." in the shell to start the server. If a connection is made to the sound desk the script should load all the values and print the URL for other devices to connect to.
-6. Open the IP address on another device and start mixing. 
+4. Rename config/default-SD.js or config/default-S.js to config/default.js depending on your desk version.
+5. For S-Series Only: Run "node . debug" in the shell to start the server. Move faders and take note of the numbers for channels and sends. You will need to update the numbers in the config file to match.
+6. Run "node ." in the shell to start the server. If a connection is made to the sound desk the script should load all the values and print the URL for other devices to connect to.
+7. Open the IP address on another device and start mixing.
 
 ## FAQs
 <details>

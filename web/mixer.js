@@ -15,25 +15,28 @@ timeout = null;
  */
 function sliderChange(e)
 {
-	this.parentNode.style.setProperty('--value', (this.value * 100) + "%");
+	const sliderValue = parseFloat(this.value);
+
+	this.parentNode.style.setProperty('--value', (sliderValue * 100) + "%");
 
 	if(!ws)
 	{
 		return;
 	}
 
-	let parameter = "send_level";
+	let send = {
+		aux: parseInt(auxSelect.options[auxSelect.selectedIndex].dataset.channel),
+		channel: parseInt(this.dataset.channel)
+	};
+
+	let parameter = "level";
 	if(this.classList.contains("panInput"))
 	{
-		parameter = "send_pan";
+		parameter = "pan";
 	}
+	send[parameter] = sliderValue;
 
-	ws.send(JSON.stringify({
-		address: "/sd/Input_Channels/" + this.dataset.channel + "/Aux_Send/" + auxSelect.value + "/" + parameter,
-		args: [
-			parseFloat(this.value)
-		]
-	}));
+	ws.send(JSON.stringify(send));
 }
 
 /**
@@ -42,8 +45,7 @@ function sliderChange(e)
 function requestValues()
 {
 	ws.send(JSON.stringify({
-		address: "/sd/Aux_Outputs/" + auxSelect.value + "/?",
-		args: []
+		"aux?": auxSelect.options[auxSelect.selectedIndex].dataset.channel
 	}));
 }
 
@@ -58,31 +60,29 @@ function onMessage(e)
 	//console.log(json);
 
 	//Setup AUX and channels
-	if(json.address == "config")
+	if(json.config)
 	{
-		buildAux(json.args.aux);
-		buildChannels(json.args.channels);
+		buildAux(json.config.aux);
+		buildChannels(json.config.channels);
 		return;
 	}
 
-	//Set values for all channels for the current AUX
-	if(json.address == "/sd/Aux_Outputs/" + auxSelect.value)
+	//If the message is the response of a request for the current aux levels
+	if(json["aux?"] &&  json["aux?"] == auxSelect.options[auxSelect.selectedIndex].dataset.channel)
 	{
 		for(let slider of document.getElementsByClassName("volumeInput"))
 		{
-			let value = json.args["/sd/Input_Channels/" + slider.dataset.channel + "/Aux_Send/" + auxSelect.value + "/send_level"] ?? 0;
-			slider.value = value;
-			slider.parentNode.style.setProperty('--value', (value * 100) + "%");
+			slider.value = json.channels[slider.dataset.channel].level;
+			slider.parentNode.style.setProperty('--value', (slider.value * 100) + "%");
 		}
 
 		for(let slider of document.getElementsByClassName("panInput"))
 		{
-			let value = json.args["/sd/Input_Channels/" + slider.dataset.channel + "/Aux_Send/" + auxSelect.value + "/send_pan"] ?? 0.5;
-			slider.value = value;
-			slider.parentNode.style.setProperty('--value', (value * 100) + "%");
+			slider.value = json.channels[slider.dataset.channel].pan;
+			slider.parentNode.style.setProperty('--value', (slider.value * 100) + "%");
 		}
 
-		let checkedFavourites = localStorage.getItem("aux" + auxSelect.value + "fav");
+		let checkedFavourites = localStorage.getItem("aux" + auxSelect.value  + "fav");
 		if(checkedFavourites)
 		{
 			checkedFavourites = checkedFavourites.split(",");
@@ -93,7 +93,7 @@ function onMessage(e)
 		}
 
 		//restore whether or not favourites checkbox was ticked previously
-		favourites.checked = localStorage.getItem("aux" + auxSelect.value + "favChecked") == "true";
+		favourites.checked = localStorage.getItem("aux" + auxSelect.value  + "favChecked") == "true";
 
 		//restore previously favourited channels
 		for(let fav of document.querySelectorAll('input[name="fav[]"]'))
@@ -107,72 +107,61 @@ function onMessage(e)
 		return;
 	}
 
-	//when an aux name changes
-	let match = /\/sd\/Aux_Outputs\/([0-9]+)\/Buss_Trim\/name/.exec(json.address);
-	if(match)
+	if(json.name != undefined)
 	{
-		let aux = match[1];
+		for(let slider of document.querySelectorAll('input[data-channel="' + json.channel + '"]'))
+		{
+			slider.previousElementSibling.innerHTML = json.name;
+		}
+	}
+
+	if(json.auxname != undefined)
+	{
+		//update the select
 		for(let option of auxSelect.options)
 		{
-			if(option.value == aux)
+			if(option.value == json.channel)
 			{
-				option.innerHTML = json.args[0];
-				
+				option.innerHTML = json.auxname;
+
 				//make sure the aux span is correct
 				auxSelect.previousElementSibling.innerHTML = auxSelect.getElementsByTagName("option")[auxSelect.selectedIndex].text;
 			}
 		}
+
+		//update the buttons
 		for(let button of auxiliaries.getElementsByTagName("button"))
 		{
-			if(button.value == aux)
+			if(button.value == json.channel)
 			{
-				button.innerText = json.args[0];
+				button.innerText = json.auxname;
+				return; //no need to update sliders if a button was changed
 			}
 		}
-		return;
 	}
 
-	//when a channel name changes
-	match = /\/sd\/Input_Channels\/([0-9]+)\/Channel_Input\/name/.exec(json.address);
-	if(match)
+	//update level and pan sliders if the current aux is visible
+	if(json.aux == auxSelect.options[auxSelect.selectedIndex].dataset.channel)
 	{
-		let channel = match[1];
-
-		for(let slider of document.querySelectorAll('input[data-channel="' + channel + '"]'))
+		if(json.level != undefined)
 		{
-			slider.previousElementSibling.innerHTML = json.args[0];
+			for(let slider of document.querySelectorAll('input[data-channel="' + json.channel + '"].volumeInput'))
+			{
+				slider.value = json.level;
+				slider.parentNode.style.setProperty('--value', (slider.value * 100) + "%");
+			}
+			return;
 		}
-		return;
-	}
 
-	//Update the volume for a single channel
-	let regex = new RegExp("/sd/Input_Channels/([0-9]+)/Aux_Send/" + auxSelect.value + "/send_level");
-	match = regex.exec(json.address);
-	if(match)
-	{
-		let channel = match[1];
-
-		for(let slider of document.querySelectorAll('input[data-channel="'+channel+'"].volumeInput'))
+		if(json.pan != undefined)
 		{
-			slider.parentNode.style.setProperty('--value', (json.args[0] * 100) + "%");
-			slider.value = json.args[0];
+			for(let slider of document.querySelectorAll('input[data-channel="' + json.channel + '"].panInput'))
+			{
+				slider.value = json.pan;
+				slider.parentNode.style.setProperty('--value', (slider.value * 100) + "%");
+			}
+			return;
 		}
-		return;
-	}
-
-	//Update the pan for a single channel
-	regex = new RegExp("/sd/Input_Channels/([0-9]+)/Aux_Send/" + auxSelect.value + "/send_pan");
-	match = regex.exec(json.address);
-	if(match)
-	{
-		let channel = match[1];
-
-		for(let slider of document.querySelectorAll('input[data-channel="'+channel+'"].panInput'))
-		{
-			slider.parentNode.style.setProperty('--value', (json.args[0] * 100) + "%");
-			slider.value = json.args[0];
-		}
-		return;
 	}
 }
 
@@ -188,10 +177,10 @@ function buildAux(options)
 
 	for(let option of options)
 	{
-		selectHTML += '<option value="' + option.send + '" data-colour="' + option.colour + '" data-stereo="' + option.stereo + '">' + option.label + '</option>';
+		selectHTML += '<option value="' + option.channel + '" data-channel="' + option.channel + '" data-colour="' + option.colour + '" data-stereo="' + option.stereo + '">' + option.label + '</option>';
 
 		let button = document.createElement("button");
-		button.value = option.send;
+		button.value = option.channel;
 		button.innerHTML = option.label;
 		button.style.setProperty('--tint', option.colour);
 		auxiliaries.appendChild(button);
@@ -252,20 +241,13 @@ function tapSlider(e)
 
 /**
  * Reset a channel to its default value.
- - Pan sliders will be set to 50%
+ - Pan sliders will be set to 0
  - Volume sliders will be set to 0
  * @param Event e - The Tap or Click Event
  */
 function resetSlider(e)
 {
-	if(e.target.classList.contains("panInput"))
-	{
-		e.target.value = 0.5;
-	}
-	if(e.target.classList.contains("volumeInput"))
-	{
-		e.target.value = 0;
-	}
+	e.target.value = 0;
 	e.target.dispatchEvent(new Event("input"));
 }
 
@@ -279,9 +261,9 @@ function buildChannels(channels)
 	for(let channel of channels)
 	{
 		html += "<div>";
-		html += '<label class="volume"><span>' + channel.label + '</span><input type="range" data-channel="' + channel.number + '" class="volumeInput" step="0.01" min="0" max="1" value="0" /></label>';
-		html += '<label class="pan"><span>' + channel.label + '</span><input type="range" data-channel="' + channel.number + '" class="panInput" step="0.01" min="0" max="1" value="0.5" /></label>';
-		html += '<label class="favourite starCheckbox"><input type="checkbox" name="fav[]" value="' + channel.number + '" title="Mark as Favourite" /></label>';
+		html += '<label class="volume"><span>' + channel.label + '</span><input type="range" data-channel="' + channel.channel + '" class="volumeInput" step="0.01" min="0" max="1" value="0" /></label>';
+		html += '<label class="pan"><span>' + channel.label + '</span><input type="range" data-channel="' + channel.channel + '" class="panInput" step="0.01" min="-1" max="1" value="0" /></label>';
+		html += '<label class="favourite starCheckbox"><input type="checkbox" name="fav[]" value="' + channel.channel + '" title="Mark as Favourite" /></label>';
 		html += '</div>';
 	}
 
@@ -352,6 +334,7 @@ document.addEventListener("DOMContentLoaded", function()
 		let colour = this.getElementsByTagName("option")[this.selectedIndex].dataset.colour;
 		document.body.style.setProperty('--tint', colour);
 
+		//set the current aux text
 		this.previousElementSibling.innerHTML = this.getElementsByTagName("option")[this.selectedIndex].text;
 
 		//toggle visibility of the pan checkbox
@@ -364,7 +347,7 @@ document.addEventListener("DOMContentLoaded", function()
 			panCheckbox.parentNode.style.display = "none";
 		}
 
-		//disable panning if it was prevously selected
+		//disable panning if it was previously selected
 		panCheckbox.checked = false;
 		panCheckbox.dispatchEvent(new Event("change"));
 
@@ -386,20 +369,6 @@ document.addEventListener("DOMContentLoaded", function()
 			document.body.classList.remove("panning");
 		}
 	});
-
-	/**
-	 * iOS Safari doesn't calculate 100vh well so we do it with javascript. When saved to homescreen 100vh is fine.
-	 */
-	window.onresize = function()
-	{
-		if('standalone' in navigator && navigator.standalone)
-		{
-			return;
-		}
-		document.body.style.setProperty('--vh', window.innerHeight + "px");
-	}
-	window.onresize();
-
 
 	/**
 	 * When the Favourites checkbox has changed

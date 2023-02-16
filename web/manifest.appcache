@@ -1,8 +1,8 @@
 CACHE MANIFEST
-# VERSION 48
+# VERSION 49
 
-mixer.css
-mixer.js
+mixer.min.css
+mixer.min.js
 index.html
 images/star.svg
 images/star-fill.svg

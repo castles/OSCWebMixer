@@ -1,0 +1,117 @@
+{
+	"desk": {
+		"type": "S",
+		"ip": "10.88.2.122",
+		"receive_port": 8100,
+		"send_port": 9100
+	},
+	"server": {
+		"port" : 8081
+	},
+	"aux": [
+		{
+			"label": "DRUMS",
+			"channel": 70,
+"send": 1,
+			"stereo": true,
+			"colour": "6, 106, 166"
+		},
+		{
+			"label": "BASS",
+			"channel": 71,
+"send": 2,
+			"stereo": true,
+			"colour": "6, 166, 99"
+		},
+		{
+			"label": "Guitar 1",
+			"channel": 72,
+			"stereo": false,
+			"colour": "13, 180, 185",
+			"send": 3
+		},
+		{
+			"label": "Guitar 2",
+			"channel": 73,
+			"stereo": false,
+			"colour": "166, 6, 6",
+			"send": 4
+		},
+		{
+			"label": "Keys 1",
+			"channel": 74,
+			"stereo": true,
+			"colour": "113, 6, 166",
+			"send": 5
+		},
+		{
+			"label": "Keys 2",
+			"channel": 75,
+			"stereo": true,
+			"colour": "194, 62, 132",
+			"send": 6
+		},
+		{
+			"label": "Lead 1",
+			"channel": 76,
+			"stereo": false,
+			"colour": "6, 46, 140",
+			"send": 7
+		},
+		{
+			"label": "Lead 2",
+			"channel": 77,
+			"stereo": false,
+			"colour": "166, 89, 6",
+			"send": 8
+		},
+		{
+			"label": "BVS",
+			"channel": 80,
+			"stereo": true,
+			"colour": "34, 167, 240",
+			"send": 9
+		},
+		{
+			"label": "Media",
+			"channel": 91,
+			"stereo": false,
+			"colour": "241, 90, 34",
+			"send": 22
+		}
+	],
+	"channels" : [
+		1,
+		2,
+		3,
+		4,
+		5,
+		6,
+		7,
+		9,
+		10,
+		11,
+		13,
+		14,
+		15,
+		17,
+		18,
+		20,
+		21,
+		22,
+		23,
+		24,
+		25,
+		26,
+		27,
+		28,
+		30,
+		31,
+		32,
+		33,
+		35,
+		41,
+		42,
+		43
+	]
+}
