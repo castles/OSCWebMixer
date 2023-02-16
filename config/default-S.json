@@ -12,16 +12,16 @@
 		{
 			"label": "DRUMS",
 			"channel": 70,
-"send": 1,
 			"stereo": true,
-			"colour": "6, 106, 166"
+			"colour": "6, 106, 166",
+			"send": 1,
 		},
 		{
 			"label": "BASS",
 			"channel": 71,
-"send": 2,
 			"stereo": true,
-			"colour": "6, 166, 99"
+			"colour": "6, 166, 99",
+			"send": 2,
 		},
 		{
 			"label": "Guitar 1",
@@ -71,13 +71,6 @@
 			"stereo": true,
 			"colour": "34, 167, 240",
 			"send": 9
-		},
-		{
-			"label": "Media",
-			"channel": 91,
-			"stereo": false,
-			"colour": "241, 90, 34",
-			"send": 22
 		}
 	],
 	"channels" : [
