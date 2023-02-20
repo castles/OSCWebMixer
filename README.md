@@ -28,7 +28,7 @@ Users can save the website as a homescreen app which makes it easy for them to r
 ## SD Basic Setup Instructions
 1. Download repository and navigate to the directory in a shell.
 2. Run "npm install" to download all the required node modules.
-3. Ensure OSC is enabled and configured under External Control on the sound desk. Make sure the OSC extension is enabled (OTH OSC SD8-SD9-SD11.dosc).
+3. Ensure OSC is enabled and configured under External Control on the sound desk. Make sure the OSC extension is enabled (OTH OSC SD8-SD9-SD11.dosc). If you don't have the extension installed contact your DiGiCo rep.
 4. Rename config/default-SD.js to config/default.js
 5. Update the config to include the console IP and send + receive ports.
 6. Go to Layout > Channel List on the console and enter the AUX numbers and Input Channel numbers into your config file. Save the config.
