@@ -11,7 +11,7 @@ Users can save the website as a homescreen app which makes it easy for them to r
 </div>
 
 ### SD Range Requirements
-* A SD Range DiGiCo Mixing desk with the OSC extension (OTH OSC SD8-SD9-SD11.dosc) installed and enabled.
+* A SD Range DiGiCo Mixing desk with the [OSC extension](https://github.com/castles/OSCWebMixer/raw/main/DiGiCo_Other_OSC_Package_V987.zip) installed and enabled. The appropriate .dosc goes on the app drive in the SDx folder, usually drive D:/SD9/
 * A computer to run the server. Windows, macOS or Linux.
 * [Node](https://nodejs.org/en/download/) must be installed. On macOS you can install it with [Homebrew](https://brew.sh/) (brew install node)
 * Server, Desk and other devices must all be on the same network
@@ -28,7 +28,7 @@ Users can save the website as a homescreen app which makes it easy for them to r
 ## SD Basic Setup Instructions
 1. Download repository and navigate to the directory in a shell.
 2. Run "npm install" to download all the required node modules.
-3. Ensure OSC is enabled and configured under External Control on the sound desk. Make sure the OSC extension is enabled (OTH OSC SD8-SD9-SD11.dosc). If you don't have the extension installed contact your DiGiCo rep.
+3. Ensure OSC is enabled and configured under External Control on the sound desk. Make sure the [OSC extension](https://github.com/castles/OSCWebMixer/raw/main/DiGiCo_Other_OSC_Package_V987.zip) is installed and enabled.
 4. Rename config/default-SD.js to config/default.js
 5. Update the config to include the console IP and send + receive ports.
 6. Go to Layout > Channel List on the console and enter the AUX numbers and Input Channel numbers into your config file. Save the config.
