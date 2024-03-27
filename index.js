@@ -22,6 +22,17 @@ if(!config.has('desk.receive_port'))
 	return;
 }
 
+let auxChannels = [];
+for(let aux of config.aux)
+{
+	if(auxChannels[aux.channel] !== undefined)
+	{
+		console.log("Duplicate aux channel detected in default.json. Channel " + aux.channel + " for " + aux.label + " cannot be the same as " + auxChannels[aux.channel].label + ". Please fix default.json and try again.");
+		return;
+	}
+	auxChannels[aux.channel] = aux;
+}
+
 if(config.has('desk.channel_count'))
 {
 	console.log("desk.channel_count is no longer necessary. This config entry has been ignored.");
