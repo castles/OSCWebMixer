@@ -1,5 +1,5 @@
-# OSCWebMixer2
-This project is no longer receiving updates because it is being replaced by version 2. OSCWebMixer2 has loads of new features and is the recommended way of using webmixer. Please visit [https://github.com/castles/OSCWebMixer2](https://github.com/castles/OSCWebMixer2) to find out more.
+> [!CAUTION]
+> This project is no longer receiving updates because it is being replaced by version 2. OSCWebMixer2 has loads of new features and is the recommended way of using webmixer. Please visit [https://github.com/castles/OSCWebMixer2](https://github.com/castles/OSCWebMixer2) to find out more.
 
 # OSCWebMixer
 A server that allows multiple web clients to control their own mix for a DiGiCo sound desk. It currently works with SD and S-Series consoles.
